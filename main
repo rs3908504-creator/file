@@ -1,0 +1,45 @@
+import json
+from datetime import datetime
+
+
+# IMPLEMENT: Convert format 1 to unified format
+def convert_format_1(data):
+    return {
+        "device_id": data["deviceId"],
+        "timestamp": data["timestamp"],
+        "value": data["temperature"]
+    }
+
+
+# IMPLEMENT: Convert format 2 to unified format
+def convert_format_2(data):
+    # Convert ISO timestamp to milliseconds
+    dt = datetime.fromisoformat(data["time"].replace("Z", "+00:00"))
+    milliseconds = int(dt.timestamp() * 1000)
+
+    return {
+        "device_id": data["id"],
+        "timestamp": milliseconds,
+        "value": data["temp"]
+    }
+
+
+def main():
+    with open("data-1.json") as f1:
+        data1 = json.load(f1)
+
+    with open("data-2.json") as f2:
+        data2 = json.load(f2)
+
+    result1 = convert_format_1(data1)
+    result2 = convert_format_2(data2)
+
+    print("Result from format 1:")
+    print(result1)
+
+    print("\nResult from format 2:")
+    print(result2)
+
+
+if __name__ == "__main__":
+    main()
